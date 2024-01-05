@@ -24,9 +24,9 @@ const Project = db.define("Project", {
     type: Sequelize.STRING,
     allowNull: true,
   },
-  UserID: {
+  FinalGrade: {
     type: Sequelize.INTEGER,
-    allowNull: false,
+    allowNull: true,
   },
 });
 

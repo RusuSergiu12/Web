@@ -3,7 +3,6 @@ import env from "dotenv";
 import User from "./Users.js";
 import Deliverable from "./Deliverables.js";
 import Grade from "./Grades.js";
-import Jury from "./Juries.js";
 import Permission from "./Permissions.js";
 import Project from "./Projects.js";
 
@@ -31,24 +30,30 @@ function Create_DB() {
     });
 }
 function FK_Config() {
-  // user and projects 1-n
-  User.hasMany(Project, { as: "Projects", foreignKey: "UserID" });
-  Project.belongsTo(User, { as: "User", foreignKey: "UserID" });
+  User.belongsToMany(Project, {
+    as: "Projects",
+    through: "UserProjects",
+    foreignKey: "UserID",
+  });
+  Project.belongsToMany(User, {
+    as: "User",
+    through: "UserProjects",
+    foreignKey: "ProjectID",
+  });
+
   // project and deliverables 1-n
   Project.hasMany(Deliverable, { as: "Deliverables", foreignKey: "ProjectID" });
   Deliverable.belongsTo(Project, { as: "Project", foreignKey: "ProjectID" });
-  // user and jury 1-n
-  User.hasMany(Jury, { as: "Juries", foreignKey: "UserID" });
-  Jury.belongsTo(User, { as: "User", foreignKey: "UserID" });
-  // project and jury 1-n
-  Project.hasMany(Jury, { as: "Juries", foreignKey: "ProjectID" });
-  Jury.belongsTo(Project, { as: "Project", foreignKey: "ProjectID" });
-  // grade and jury 1-n
-  Grade.hasMany(Jury, { as: "Juries", foreignKey: "GradeID" });
-  Jury.belongsTo(Grade, { as: "Grade", foreignKey: "GradeID" });
+
+  // user and grade 1-n
+  User.hasMany(Grade, { as: "Grades", foreignKey: "UserID" });
+  Grade.belongsTo(User, { as: "User", foreignKey: "UserID" });
   // grade and deliverables 1-n
-  Grade.hasMany(Deliverable, { as: "Deliverables", foreignKey: "GradeID" });
-  Deliverable.belongsTo(Grade, { as: "Grade", foreignKey: "GradeID" });
+  Deliverable.hasMany(Grade, { as: "Grades", foreignKey: "DeliverableID" });
+  Grade.belongsTo(Deliverable, {
+    as: "Deliverable",
+    foreignKey: "DeliverableID",
+  });
   // user and permission 1-n
   User.hasMany(Permission, { as: "Permissions", foreignKey: "UserID" });
   Permission.belongsTo(User, { as: "User", foreignKey: "UserID" });

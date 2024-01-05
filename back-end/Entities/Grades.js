@@ -8,7 +8,7 @@ const Grade = db.define("Grade", {
     autoIncrement: true,
     allowNull: false,
   },
-  JuryID: {
+  UserID: {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
