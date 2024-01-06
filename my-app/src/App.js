@@ -1,7 +1,9 @@
+import LoginSignup from "./components/LoginSignup";
+
 function App() {
   return (
     <div className="App">
-      <h1>My React Application!</h1>
+      <LoginSignup />
     </div>
   );
 }
