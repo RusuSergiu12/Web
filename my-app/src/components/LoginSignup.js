@@ -58,7 +58,7 @@ const LoginSignup = () => {
             setAction("Login");
           }}
         >
-          Create Account
+          Already have an account?
         </div>
         <div
           className={action === "Sign Up" ? "submit gray" : "submit"}
@@ -66,7 +66,7 @@ const LoginSignup = () => {
             setAction("Sign Up");
           }}
         >
-          Already have an account?
+          Create Account
         </div>
       </div>
       <button className="submit" id="subBtn">
