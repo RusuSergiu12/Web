@@ -44,8 +44,8 @@ const LoginSignup = () => {
           alert("Invalid username/password");
           return;
         }
-
-        navigate("/projects");
+        const userId = user.UserID;
+        navigate(`/projects/${userId}`);
       } catch (error) {
         console.error("Error:", error.message);
       }
@@ -102,8 +102,7 @@ const LoginSignup = () => {
         console.log("Response Data:", responseData);
 
         if (responseData) {
-          console.log("User created successfully, navigating to /projects");
-          navigate("/projects");
+          alert("User created successfully, please login to continue");
         } else {
           console.error("Failed to create user:", responseData.msg);
         }

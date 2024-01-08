@@ -7,7 +7,7 @@ function App() {
     <Router>
       <Routes>
         <Route exact path="/" element={<LoginSignup />} />
-        <Route exact path="/projects" element={<ProjectsPage />} />
+        <Route path="/projects/:userId" element={<ProjectsPage />} />
       </Routes>
     </Router>
   );

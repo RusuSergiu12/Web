@@ -1,0 +1,75 @@
+.projects-container {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* Changed to flex-start to align content to the top */
+  height: 100vh;
+}
+
+.projects-list {
+  max-height: 150vh; /* Set a max-height for the scrolling area */
+  overflow-y: auto; /* Enables vertical scrolling if the content overflows */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%; /* Set a specific width if needed */
+}
+.project-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border: 1px solid black;
+  background-color: #ccc;
+  border-radius: 10px;
+  padding: 15px;
+  width: 300px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.modal {
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4); /* Dim the background */
+}
+
+.modal-content {
+  background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent background */
+  margin: 10% auto; /* Adjust top margin as needed */
+  padding: 20px;
+  border-radius: 8px; /* Optional: for rounded corners */
+  border: 1px solid #888;
+  width: 30%; /* Thinner width */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#addBtn {
+  padding: 10px 20px;
+  background-color: #5c6bc0;
+  margin-bottom: 30px;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  outline: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  margin-top: 30px;
+}
+#addBtn:hover {
+  background-color: #3949ab;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+#addBtn:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
