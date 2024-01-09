@@ -5,6 +5,7 @@ import {
   createProject,
   deleteProject,
   updateProject,
+  getProjectsUserCanGrade,
 } from "../DataAccess/ProjectsDA.js";
 
 let projectRouter = express.Router();
@@ -21,6 +22,18 @@ projectRouter.route("/project/:id").get(async (req, res) => {
 projectRouter.route("/project/:id").delete(async (req, res) => {
   return res.json(await deleteProject(req.params.id));
 });
+
+projectRouter.route("/gradeable-projects/:userId").get(async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const projects = await getProjectsUserCanGrade(userId);
+    return res.status(200).json(projects);
+  } catch (error) {
+    console.error("Error fetching gradeable projects:", error);
+    return res.status(500).send(error.message);
+  }
+});
+
 projectRouter.route("/project/:id").put(async (req, res) => {
   let ret = await updateProject(req.params.id, req.body);
   if (ret.error) {

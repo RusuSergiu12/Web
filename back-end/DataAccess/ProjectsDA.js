@@ -1,5 +1,6 @@
 import Project from "../Entities/Projects.js";
 import User from "../Entities/Users.js";
+import Permission from "../Entities/Permissions.js";
 
 async function getProjects() {
   return await Project.findAll({ include: ["User"] });
@@ -8,6 +9,26 @@ async function getProjects() {
 // function to get a project by id
 async function getProjectById(id) {
   return await Project.findByPk(id, { include: ["User"] });
+}
+
+async function getProjectsUserCanGrade(userId) {
+  try {
+    const projects = await Permission.findAll({
+      where: { UserID: userId, CanGrade: true },
+      include: [
+        {
+          model: Project,
+          as: "Project", // Assuming 'as' is defined in your association
+        },
+      ],
+    });
+
+    // Extracting the projects from the permissions
+    return projects.map((permission) => permission.Project);
+  } catch (error) {
+    console.error("Error in getProjectsUserCanGrade:", error);
+    throw error;
+  }
 }
 //function to create a new project
 async function createProject(project) {
@@ -41,4 +62,5 @@ export {
   createProject,
   deleteProject,
   updateProject,
+  getProjectsUserCanGrade,
 };
