@@ -44,7 +44,9 @@ const LoginSignup = () => {
           alert("Invalid username/password");
           return;
         }
+        localStorage.setItem('UserType', userData.UserType);
         const userId = user.UserID;
+        
         navigate(`/projects/${userId}`);
       } catch (error) {
         console.error("Error:", error.message);
@@ -102,6 +104,8 @@ const LoginSignup = () => {
         console.log("Response Data:", responseData);
 
         if (responseData) {
+          localStorage.setItem('UserType', newUser.UserType); // Save user type to localStorage
+
           alert("User created successfully, please login to continue");
         } else {
           console.error("Failed to create user:", responseData.msg);

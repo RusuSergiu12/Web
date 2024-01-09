@@ -1,13 +1,21 @@
 import "../components-css/ProjectsPage.css";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import ProjectForm from "./ProjectFrom.js";
+import GiveGrades from "./GiveGrades.js";
 
 const ProjectsPage = () => {
   const { userId } = useParams();
   const [projects, setProjects] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [projectSubmitted, setProjectSubmitted] = useState(false);
+
+  const navigate = useNavigate();
+
+  const goToGiveGrades = () => {
+    navigate("/give-grades/" + userId + "");
+  };
 
   const handleNewProjectSubmit = (newProject) => {
     setShowForm(false);
@@ -19,15 +27,20 @@ const ProjectsPage = () => {
   };
   useEffect(() => {
     const fetchProjects = async () => {
+      let url;
+      const userType = localStorage.getItem("UserType");
+
+      if (userType === "professor") {
+        url = `http://localhost:9000/api/projects`;
+      } else {
+        url = `http://localhost:9000/api/userProjects/${userId}`;
+      }
+
       try {
-        const response = await fetch(
-          `http://localhost:9000/api/userProjects/${userId}`
-        );
+        const response = await fetch(url);
         const data = await response.json();
-        console.log("API Response:", data);
         if (Array.isArray(data)) {
           setProjects(data);
-          setProjectSubmitted(false); // Reset projectSubmitted to false after refetching
         } else {
           console.error("Data is not an array:", data);
         }
@@ -37,8 +50,9 @@ const ProjectsPage = () => {
     };
 
     fetchProjects();
-  }, [userId, projectSubmitted]); // Include projectSubmitted in the dependencies array
+  }, [userId, projectSubmitted]);
 
+  const userType = localStorage.getItem("UserType");
   return (
     <div className="projects-container">
       <div className="projects-list">
@@ -64,9 +78,16 @@ const ProjectsPage = () => {
           </div>
         </div>
       )}
-      <button id="addBtn" onClick={toggleForm}>
-        Add New Project
-      </button>{" "}
+      {userType !== "professor" && (
+        <div className="butoane">
+          <button id="addBtn" onClick={toggleForm}>
+            Add New Project
+          </button>
+          <button id="giveGrades" onClick={goToGiveGrades}>
+            Grade colleagues
+          </button>
+        </div>
+      )}
     </div>
   );
 };

@@ -9,7 +9,10 @@ async function getPermissionById(id) {
 }
 //function to see permision of a user
 async function getUserPermission(id) {
-  return await Permission.findAll({ where: { UserId: id } });
+  return await Permission.findAll({
+    include: ["Projects"],
+    where: { UserId: id },
+  });
 }
 //function to create a new permission
 async function createPermission(permission) {

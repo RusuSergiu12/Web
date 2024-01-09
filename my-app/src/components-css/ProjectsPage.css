@@ -27,6 +27,7 @@
   padding: 15px;
   width: 300px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
 }
 .modal {
   position: fixed;
@@ -65,11 +66,39 @@
   transition: all 0.3s ease;
   margin-top: 30px;
 }
+.butoane {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+}
+#giveGrades {
+  padding: 10px 20px;
+  background-color: #5c6bc0;
+  margin-bottom: 30px;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  outline: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  margin-top: 30px;
+}
 #addBtn:hover {
   background-color: #3949ab;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
+#giveGrades:hover {
+  background-color: #3949ab;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
 #addBtn:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+#giveGrades:active {
   transform: translateY(2px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
