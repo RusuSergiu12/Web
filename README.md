@@ -1,4 +1,4 @@
-# First thing first
+# In order for the project to work
 
 cd my-app
 
@@ -21,6 +21,8 @@ npm install mysql2
 npm install sequelize
 
 npm install nodemon
+
+## Also, modify in .env the user and the password, and run the code in database.sql in order to create the database and insert data into it
 
 # Anonymous grading web application
 
