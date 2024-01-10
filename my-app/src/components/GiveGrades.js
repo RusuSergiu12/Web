@@ -31,12 +31,19 @@ const GiveGrades = () => {
   const goToProjects = () => {
     navigate(`/projects/${userId}`);
   };
+  const navigateToDeliverablesGrade = (projectId) => {
+    navigate(`/deliverables-grade/${projectId}`);
+  };
 
   return (
     <div className="projects-container">
       <div className="projects-list">
         {projects.map((project) => (
-          <div className="project-card" key={project.ProjectID}>
+          <div
+            className="project-card"
+            key={project.ProjectID}
+            onClick={() => navigateToDeliverablesGrade(project.ProjectID)}
+          >
             <h2>{project.Title}</h2>
             <p>{project.Description}</p>
             <a href={project.VideoLink}>Video Link</a>

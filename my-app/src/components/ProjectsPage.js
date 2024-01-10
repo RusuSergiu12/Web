@@ -17,6 +17,10 @@ const ProjectsPage = () => {
     navigate("/give-grades/" + userId + "");
   };
 
+  const navigateToDeliverables = (projectId) => {
+    navigate(`/deliverables/${projectId}`);
+  };
+
   const handleNewProjectSubmit = (newProject) => {
     setShowForm(false);
     setProjectSubmitted(true);
@@ -58,7 +62,11 @@ const ProjectsPage = () => {
       <div className="projects-list">
         {Array.isArray(projects) &&
           projects.map((project) => (
-            <div className="project-card" key={project.ProjectID}>
+            <div
+              className="project-card"
+              key={project.ProjectID}
+              onClick={() => navigateToDeliverables(project.ProjectID)}
+            >
               <h2>{project.Title}</h2>
               <p>{project.Description}</p>
               <a href={project.VideoLink}>Video Link</a>
