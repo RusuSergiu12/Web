@@ -4,6 +4,14 @@ async function getDeliverables() {
   return await Deliverable.findAll({ include: ["Grades"] });
 }
 
+//get deliverables by ProjectID
+async function getDeliverablesByProjectID(projectID) {
+  return await Deliverable.findAll({
+    where: { ProjectID: projectID },
+    include: ["Grades"],
+  });
+}
+
 // function to get a deliverable by id
 async function getDeliverableById(id) {
   return await Deliverable.findByPk(id);
@@ -40,4 +48,5 @@ export {
   createDeliverable,
   deleteDeliverable,
   updateDeliverable,
+  getDeliverablesByProjectID,
 };

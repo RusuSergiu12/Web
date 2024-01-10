@@ -5,6 +5,7 @@ import {
   createDeliverable,
   deleteDeliverable,
   updateDeliverable,
+  getDeliverablesByProjectID,
 } from "../DataAccess/DeliverableDA.js";
 
 let deliverableRouter = express.Router();
@@ -17,6 +18,9 @@ deliverableRouter.route("/deliverables").get(async (req, res) => {
 });
 deliverableRouter.route("/deliverable/:id").get(async (req, res) => {
   return res.json(await getDeliverableById(req.params.id));
+});
+deliverableRouter.route("/deliverables/:projectID").get(async (req, res) => {
+  return res.json(await getDeliverablesByProjectID(req.params.projectID));
 });
 deliverableRouter.route("/deliverable/:id").delete(async (req, res) => {
   return res.json(await deleteDeliverable(req.params.id));
