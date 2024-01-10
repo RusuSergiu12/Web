@@ -57,15 +57,15 @@ CREATE TABLE IF NOT EXISTS `permission` (
   KEY `ProjectID` (`ProjectID`),
   CONSTRAINT `permission_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `permission_ibfk_2` FOREIGN KEY (`ProjectID`) REFERENCES `project` (`ProjectID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 INSERT INTO `permission` (`PermissionID`, `UserID`, `ProjectID`, `CanGrade`, `CanModifyGrade`, `GradeModificationDeadline`) VALUES
-	(1, 2, 2, 1, 0, NULL),
-	(2, 4, 2, 1, 0, NULL),
-	(3, 4, 1, 0, 0, NULL),
-	(4, 2, 1, 0, 0, NULL),
-	(5, 3, 1, 1, 0, NULL),
-	(6, 3, 2, 0, 0, NULL);
+	(1, 2, 2, 1, 0, '2024-01-10 00:10:28'),
+	(2, 4, 2, 1, 0, '2024-01-10 00:10:29'),
+	(3, 4, 1, 0, 0, '2024-01-10 00:10:30'),
+	(4, 2, 1, 1, 0, '2024-01-10 00:10:30'),
+	(5, 3, 1, 1, 0, '2024-01-10 00:10:31'),
+	(6, 3, 2, 0, 0, '2024-01-10 00:10:31');
 
 CREATE TABLE IF NOT EXISTS `project` (
   `ProjectID` int(11) NOT NULL AUTO_INCREMENT,
@@ -75,14 +75,16 @@ CREATE TABLE IF NOT EXISTS `project` (
   `DeploymentLink` varchar(255) DEFAULT NULL,
   `FinalGrade` int(11) DEFAULT NULL,
   PRIMARY KEY (`ProjectID`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 INSERT INTO `project` (`ProjectID`, `Title`, `Description`, `VideoLink`, `DeploymentLink`, `FinalGrade`) VALUES
 	(1, 'My Project', 'This is my project description.', 'https://example.com/video', 'https://example.com/deployment', NULL),
 	(2, 'My Project2', 'This is my project description2.', 'https://example.com/video', 'https://example.com/deployment', NULL),
 	(3, ' Proj', 'good Description', 'https://example.com/video', 'https://example.com/deployment', NULL),
 	(4, 'proj4', 'dadada', 'https://example.com/deployment', 'https://example.com/deployment', NULL),
-	(9, 'dasd', 'dasda', '41321', 'gsdfg', NULL);
+	(9, 'dasd', 'dasda', '41321', 'gsdfg', NULL),
+	(10, 'Proj', 'Proj', 'https://example.com/', 'https://example.com/', NULL),
+	(11, 'a', 'a', 'a', 'a', NULL);
 
 CREATE TABLE IF NOT EXISTS `user` (
   `UserID` int(11) NOT NULL AUTO_INCREMENT,
@@ -114,11 +116,11 @@ CREATE TABLE IF NOT EXISTS `userprojects` (
 
 INSERT INTO `userprojects` (`UserID`, `ProjectID`) VALUES
 	(2, 1),
-	(4, 1),
 	(2, 2),
 	(3, 2),
 	(2, 3),
-	(2, 9);
+	(2, 9),
+	(5, 10);
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
