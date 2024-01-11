@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import "../components-css/Deliverables.css";
 
 const Deliverables = () => {
   const { projectID } = useParams();
@@ -11,9 +12,9 @@ const Deliverables = () => {
   useEffect(() => {
     const fetchDeliverables = async () => {
       try {
-        const response = await axios.get(`http://localhost:9000/api/deliverables/${projectID}`);
-       
-        console.log("API Response:", response);
+        const response = await axios.get(
+          `http://localhost:9000/api/deliverables/${projectID}`
+        );
 
         if (response.data && Array.isArray(response.data)) {
           setDeliverables(response.data);
@@ -31,20 +32,21 @@ const Deliverables = () => {
   }, [projectID]);
 
   return (
-    <div>
-      <h1>Deliverables</h1>
+    <div className="deliverables-container">
       {loading ? (
         <p>Loading...</p>
       ) : deliverables && deliverables.length ? (
-        <ul>
+        <div className="deliverables-list">
           {deliverables.map((deliverable) => (
-            <li key={deliverable.DeliverableID}>
+            <div className="deliverable-card" key={deliverable.DeliverableID}>
               <h2>{deliverable.Title}</h2>
               <p>{deliverable.Description}</p>
-              <p>Due Date: {new Date(deliverable.DueDate).toLocaleDateString()}</p>
-            </li>
+              <p>
+                Due Date: {new Date(deliverable.DueDate).toLocaleDateString()}
+              </p>
+            </div>
           ))}
-        </ul>
+        </div>
       ) : (
         <p>No deliverables found.</p>
       )}
