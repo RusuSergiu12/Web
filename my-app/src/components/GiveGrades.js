@@ -32,7 +32,7 @@ const GiveGrades = () => {
     navigate(`/projects/${userId}`);
   };
   const navigateToDeliverablesGrade = (projectId) => {
-    navigate(`/deliverables-grade/${projectId}`);
+    navigate(`/deliverables-grade/${userId}/${projectId}`);
   };
 
   return (

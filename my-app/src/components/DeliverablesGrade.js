@@ -14,6 +14,7 @@ const DeliverablesGrades = () => {
   const handleCardClick = (deliverable) => {
     setSelectedDeliverable(deliverable);
     setShowGradeModal(true);
+    console.log(userId);
   };
 
   const handleGradeChange = (event) => {
@@ -32,7 +33,7 @@ const DeliverablesGrades = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            UserID: userId, // Make sure this is the correct field name expected by your API
+            UserID: userId,
             DeliverableID: selectedDeliverable.DeliverableID,
             GradeValue: gradeValue,
             GradeDate: new Date().toISOString(),
