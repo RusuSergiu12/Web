@@ -17,6 +17,10 @@ function App() {
           path="/deliverables-grade/:projectID"
           element={<DeliverablesGrade />}
         />
+        <Route
+          path="/deliverables-grade/:userId/:projectID"
+          element={<DeliverablesGrade />}
+        />
       </Routes>
     </Router>
   );

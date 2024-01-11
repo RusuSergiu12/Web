@@ -25,6 +25,22 @@ async function deleteDeliverable(id) {
   let deliverable = await Deliverable.findByPk(id);
   return await deliverable.destroy();
 }
+async function createDeliverableWithProjId(deliverable, projectID) {
+  try {
+    // Add the projectID to the deliverable object
+    deliverable.ProjectID = projectID;
+
+    // Create the deliverable in the database
+    const createdDeliverable = await Deliverable.create(deliverable);
+
+    // Return the newly created deliverable
+    return createdDeliverable;
+  } catch (error) {
+    // If there's any error, throw it to be handled by the calling function
+    throw error;
+  }
+}
+
 //function to update a deliverable
 async function updateDeliverable(id, deliverable) {
   try {
@@ -49,4 +65,5 @@ export {
   deleteDeliverable,
   updateDeliverable,
   getDeliverablesByProjectID,
+  createDeliverableWithProjId,
 };

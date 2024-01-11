@@ -1,35 +1,60 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import DeliverableForm from "./DeliverableForm";
 import "../components-css/Deliverables.css";
 
 const Deliverables = () => {
   const { projectID } = useParams();
   const [deliverables, setDeliverables] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchDeliverables = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:9000/api/deliverables/${projectID}`
-        );
+  const fetchDeliverables = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:9000/api/deliverables/${projectID}`
+      );
 
-        if (response.data && Array.isArray(response.data)) {
-          setDeliverables(response.data);
-        } else {
-          console.error("Invalid response format:", response.data);
-        }
-      } catch (error) {
-        console.error("Error fetching deliverables:", error);
-      } finally {
-        setLoading(false);
+      const data = await response.json();
+      if (Array.isArray(data)) {
+        setDeliverables(data);
+      } else {
+        console.error("Invalid response format:", data);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching deliverables:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchDeliverables();
   }, [projectID]);
+
+  const handleNewDeliverableSubmit = async (formData) => {
+    try {
+      const response = await fetch(
+        `http://localhost:9000/api/deliverable/${projectID}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      const data = await response.json();
+      if (data) {
+        fetchDeliverables();
+        setShowForm(false);
+      }
+    } catch (error) {
+      console.error("Error adding deliverable:", error);
+    }
+  };
 
   return (
     <div className="deliverables-container">
@@ -46,9 +71,28 @@ const Deliverables = () => {
               </p>
             </div>
           ))}
+          <div className="butoane">
+            <button id="addDeliv" onClick={() => setShowForm(true)}>
+              Add New Deliverables
+            </button>
+            <button id="goBackBtn" onClick={() => navigate(-1)}>
+              Go Back
+            </button>
+          </div>
         </div>
       ) : (
         <p>No deliverables found.</p>
+      )}
+      {showForm && (
+        <div className="modal">
+          <div className="modal-content">
+            <DeliverableForm
+              onSubmit={handleNewDeliverableSubmit}
+              onCancel={() => setShowForm(false)}
+              ProjectID={projectID} // Pass the projectID here
+            />
+          </div>
+        </div>
       )}
     </div>
   );

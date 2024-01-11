@@ -1,15 +1,20 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .project-form {
-  background-color: rgba(
-    255,
-    255,
-    255,
-    0.9
-  ); /* Semi-transparent white background */
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 400px; /* Narrower width */
-  margin: auto;
+  background-color: rgba(255, 255, 255, 0.9);
 }
 
 .project-form form {

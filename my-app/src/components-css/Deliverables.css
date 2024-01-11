@@ -2,13 +2,15 @@
   padding: 15px;
   display: flex;
   flex-direction: column;
+  padding-bottom: 50px;
   align-items: center;
   justify-content: flex-start;
   height: 100vh;
+  box-sizing: border-box;
 }
 
 .deliverables-list {
-  max-height: 150vh;
+  max-height: 100vh;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -31,7 +33,7 @@
   cursor: pointer;
 }
 
-.button {
+#goBackBtn {
   padding: 10px 20px;
   background-color: #5c6bc0;
   color: white;
@@ -45,12 +47,34 @@
   margin-top: 30px;
 }
 
-.button:hover {
+#goBackBtn:hover {
   background-color: #3949ab;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
-.button:active {
+#goBackBtn:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+#addDeliv {
+  padding: 10px 20px;
+  background-color: #5c6bc0;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  outline: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  margin-top: 30px;
+}
+#addDeliv:hover {
+  background-color: #3949ab;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+#addDeliv:active {
   transform: translateY(2px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
