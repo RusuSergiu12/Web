@@ -20,6 +20,7 @@ npm install mysql2
 
 npm install sequelize
 
+npm install axios
 
 npm install nodemon
 
