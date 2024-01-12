@@ -49,7 +49,6 @@ const GiveGrades = () => {
             <a href={project.VideoLink}>Video Link</a>
             <p></p>
             <a href={project.DeploymentLink}>Deployment Link</a>
-            <h3>Final Grade: {project.FinalGrade}</h3>
           </div>
         ))}
       </div>

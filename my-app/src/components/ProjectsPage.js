@@ -16,6 +16,34 @@ const ProjectsPage = () => {
   const goToGiveGrades = () => {
     navigate("/give-grades/" + userId + "");
   };
+  const fetchDeliverables = async () => {
+    const response = await fetch("http://localhost:9000/api/deliverables");
+    const deliverables = await response.json();
+    const deliverableMap = {};
+
+    deliverables.forEach((deliverable) => {
+      if (!deliverableMap[deliverable.projectId]) {
+        deliverableMap[deliverable.projectId] = [];
+      }
+      deliverableMap[deliverable.projectId].push(deliverable.deliverableId);
+    });
+
+    return deliverableMap;
+  };
+
+  const calculateAverageGrade = (grades) => {
+    if (grades.length <= 2) return "N/A"; // Not enough grades to exclude the lowest and highest
+    const sortedGrades = grades.sort((a, b) => a - b);
+    // Remove the lowest and highest grade
+    sortedGrades.pop();
+    sortedGrades.shift();
+    // Calculate the average of the remaining grades
+    const sum = sortedGrades.reduce(
+      (accumulator, current) => accumulator + current,
+      0
+    );
+    return (sum / sortedGrades.length).toFixed(2);
+  };
 
   const navigateToDeliverables = (projectId) => {
     navigate(`/deliverables/${projectId}`);
@@ -30,32 +58,52 @@ const ProjectsPage = () => {
     setShowForm(!showForm);
   };
   useEffect(() => {
-    const fetchProjects = async () => {
-      let url;
+    const fetchDeliverablesAndGrades = async () => {
       const userType = localStorage.getItem("UserType");
-
-      if (userType === "professor") {
-        url = `http://localhost:9000/api/projects`;
-      } else {
-        url = `http://localhost:9000/api/userProjects/${userId}`;
-      }
+      const projectsUrl =
+        userType === "professor"
+          ? `http://localhost:9000/api/projects`
+          : `http://localhost:9000/api/userProjects/${userId}`;
 
       try {
-        const response = await fetch(url);
-        const data = await response.json();
-        if (Array.isArray(data)) {
-          setProjects(data);
-        } else {
-          console.error("Data is not an array:", data);
-        }
+        // Fetch projects and deliverables
+        const [projectsResponse, deliverablesResponse] = await Promise.all([
+          fetch(projectsUrl),
+          fetch("http://localhost:9000/api/deliverables"),
+        ]);
+        const projectsData = await projectsResponse.json();
+        const deliverablesData = await deliverablesResponse.json();
+
+        // Initialize a map to collect grades for each project
+        const projectGradesMap = {};
+
+        // Loop through deliverables to collect grades
+        deliverablesData.forEach((deliverable) => {
+          const projectId = deliverable.ProjectID;
+          if (!projectGradesMap[projectId]) {
+            projectGradesMap[projectId] = [];
+          }
+          // Add all grade values to the project's grades array, converting them to numbers
+          projectGradesMap[projectId].push(
+            ...deliverable.Grades.map((g) => parseFloat(g.GradeValue))
+          );
+        });
+
+        // Calculate average grade for each project
+        const projectsWithGrades = projectsData.map((project) => {
+          const grades = projectGradesMap[project.ProjectID] || [];
+          project.FinalGrade = calculateAverageGrade(grades);
+          return project;
+        });
+
+        setProjects(projectsWithGrades);
       } catch (error) {
-        console.error("Fetching projects failed:", error);
+        console.error("Fetching projects or deliverables failed:", error);
       }
     };
 
-    fetchProjects();
+    fetchDeliverablesAndGrades();
   }, [userId, projectSubmitted]);
-
   const userType = localStorage.getItem("UserType");
   return (
     <div className="projects-container">
@@ -72,7 +120,9 @@ const ProjectsPage = () => {
               <a href={project.VideoLink}>Video Link</a>
               <p></p>
               <a href={project.DeploymentLink}>Deployment Link</a>
-              <h3>Final Grade: {project.FinalGrade}</h3>
+              {userType === "professor" && (
+                <h3>Final Grade: {project.FinalGrade}</h3>
+              )}
             </div>
           ))}
       </div>
