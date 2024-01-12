@@ -33,5 +33,20 @@ async function updateGrade(id, grade) {
     return { error: true, msg: "Error updating grade" };
   }
 }
-
-export { getGrades, getGradeById, createGrade, deleteGrade, updateGrade };
+async function hasUserGradedDeliverable(userId, deliverableId) {
+  const grade = await Grade.findOne({
+    where: {
+      UserID: userId,
+      DeliverableID: deliverableId,
+    },
+  });
+  return grade !== null;
+}
+export {
+  getGrades,
+  getGradeById,
+  createGrade,
+  deleteGrade,
+  updateGrade,
+  hasUserGradedDeliverable,
+};

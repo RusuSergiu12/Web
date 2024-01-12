@@ -9,12 +9,27 @@ const DeliverablesGrades = () => {
   const [showGradeModal, setShowGradeModal] = useState(false);
   const [selectedDeliverable, setSelectedDeliverable] = useState(null);
   const [grade, setGrade] = useState(1.0);
+  const [gradesData, setGradesData] = useState([]);
+  const [gradedDeliverableIds, setGradedDeliverableIds] = useState([]);
+
   const navigate = useNavigate();
 
-  const handleCardClick = (deliverable) => {
-    setSelectedDeliverable(deliverable);
-    setShowGradeModal(true);
-    console.log(userId);
+  const handleCardClick = async (deliverable) => {
+    try {
+      const response = await fetch(
+        `http://localhost:9000/api/hasGraded?userId=${userId}&deliverableId=${deliverable.DeliverableID}`
+      );
+      const { hasGraded } = await response.json();
+
+      if (hasGraded) {
+        alert("You have already graded this deliverable.");
+      } else {
+        setSelectedDeliverable(deliverable);
+        setShowGradeModal(true);
+      }
+    } catch (error) {
+      console.error("Error checking grade status:", error);
+    }
   };
 
   const handleGradeChange = (event) => {
@@ -26,31 +41,42 @@ const DeliverablesGrades = () => {
     const gradeValue = parseFloat(grade);
 
     if (gradeValue >= 1.0 && gradeValue <= 10.0) {
-      try {
-        const response = await fetch("http://localhost:9000/api/grade", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            UserID: userId,
-            DeliverableID: selectedDeliverable.DeliverableID,
-            GradeValue: gradeValue,
-            GradeDate: new Date().toISOString(),
-          }),
-        });
+      const deliverableId = selectedDeliverable.DeliverableID;
+      if (gradedDeliverableIds.includes(deliverableId)) {
+        alert("You have already graded this deliverable.");
+      } else {
+        try {
+          const response = await fetch("http://localhost:9000/api/grade", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              UserID: userId,
+              DeliverableID: selectedDeliverable.DeliverableID,
+              GradeValue: gradeValue,
+              GradeDate: new Date().toISOString(),
+            }),
+          });
 
-        const data = await response.json();
-        if (response.ok) {
-          // Handle successful response
-          setShowGradeModal(false);
-          // Additional UI update or state management
-        } else {
-          // Handle errors in response
-          console.error("Failed to submit grade:", data);
+          const data = await response.json();
+          if (response.ok) {
+            // Handle successful response
+            setShowGradeModal(false);
+            setGradedDeliverableIds([...gradedDeliverableIds, deliverableId]);
+            const newGradesResponse = await fetch(
+              "http://localhost:9000/api/grades"
+            );
+            const newGradesData = await newGradesResponse.json();
+            setGradesData(newGradesData);
+            // Additional UI update or state management
+          } else {
+            // Handle errors in response
+            console.error("Failed to submit grade:", data);
+          }
+        } catch (error) {
+          console.error("Error submitting grade:", error);
         }
-      } catch (error) {
-        console.error("Error submitting grade:", error);
       }
     } else {
       alert("Please enter a valid grade between 1.00 and 10.00.");
@@ -58,28 +84,54 @@ const DeliverablesGrades = () => {
   };
 
   useEffect(() => {
-    const fetchDeliverables = async () => {
+    const fetchData = async () => {
+      setLoading(true);
+
       try {
-        const response = await fetch(
+        const deliverablesResponse = await fetch(
           `http://localhost:9000/api/deliverables/${projectID}`
         );
+        const gradesResponse = await fetch("http://localhost:9000/api/grades");
 
-        const data = await response.json();
+        const [deliverablesData, gradesData] = await Promise.all([
+          deliverablesResponse.json(),
+          gradesResponse.json(),
+        ]);
 
-        if (Array.isArray(data)) {
-          setDeliverables(data);
+        // Filter out the grades related to the current user
+        const userGradedDeliverablesIds = gradesData
+          .filter((grade) => grade.UserID === userId)
+          .map((grade) => grade.DeliverableID);
+
+        // Set graded deliverable IDs
+        setGradedDeliverableIds(userGradedDeliverablesIds);
+
+        // Process and set deliverables data
+        if (Array.isArray(deliverablesData)) {
+          const deliverablesWithGradingStatus = deliverablesData.map(
+            (deliverable) => ({
+              ...deliverable,
+              hasGraded: userGradedDeliverablesIds.includes(
+                deliverable.DeliverableID
+              ),
+            })
+          );
+          setDeliverables(deliverablesWithGradingStatus);
         } else {
-          console.error("Invalid response format:", data);
+          console.error(
+            "Invalid response format for deliverables:",
+            deliverablesData
+          );
         }
       } catch (error) {
-        console.error("Error fetching deliverables:", error);
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchDeliverables();
-  }, [projectID]);
+    fetchData();
+  }, [projectID, userId]);
 
   return (
     <div className="deliverables-container">
@@ -91,7 +143,7 @@ const DeliverablesGrades = () => {
             <div
               className="deliverable-card"
               key={deliverable.DeliverableID}
-              onClick={() => handleCardClick(deliverable)}
+              onClick={() => handleCardClick(deliverable, gradesData)}
             >
               <h2>{deliverable.Title}</h2>
               <p>{deliverable.Description}</p>
