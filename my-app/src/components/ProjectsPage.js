@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProjectForm from "./ProjectFrom.js";
-import GiveGrades from "./GiveGrades.js";
 
 const ProjectsPage = () => {
   const { userId } = useParams();
@@ -16,23 +15,9 @@ const ProjectsPage = () => {
   const goToGiveGrades = () => {
     navigate("/give-grades/" + userId + "");
   };
-  const fetchDeliverables = async () => {
-    const response = await fetch("http://localhost:9000/api/deliverables");
-    const deliverables = await response.json();
-    const deliverableMap = {};
-
-    deliverables.forEach((deliverable) => {
-      if (!deliverableMap[deliverable.projectId]) {
-        deliverableMap[deliverable.projectId] = [];
-      }
-      deliverableMap[deliverable.projectId].push(deliverable.deliverableId);
-    });
-
-    return deliverableMap;
-  };
 
   const calculateAverageGrade = (grades) => {
-    if (grades.length <= 2) return "N/A"; // Not enough grades to exclude the lowest and highest
+    if (grades.length <= 2) return "Not graded"; // Not enough grades to exclude the lowest and highest
     const sortedGrades = grades.sort((a, b) => a - b);
     // Remove the lowest and highest grade
     sortedGrades.pop();
@@ -113,7 +98,10 @@ const ProjectsPage = () => {
             <div
               className="project-card"
               key={project.ProjectID}
-              onClick={() => navigateToDeliverables(project.ProjectID)}
+              onClick={() =>
+                userType !== "professor" &&
+                navigateToDeliverables(project.ProjectID)
+              }
             >
               <h2>{project.Title}</h2>
               <p>{project.Description}</p>
