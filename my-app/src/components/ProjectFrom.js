@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import "../components-css/ProjectForm.css";
 
 const ProjectForm = ({ onSubmit, onCancel }) => {
-  const { userId } = useParams(); // This assumes that 'userId' is part of the path in your routing setup
+  const { userId } = useParams(); 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [videoLink, setVideoLink] = useState("");
@@ -20,7 +20,7 @@ const ProjectForm = ({ onSubmit, onCancel }) => {
     };
 
     try {
-      // POST the new project to the server
+      
       const response = await fetch("http://localhost:9000/api/project", {
         method: "POST",
         headers: {
@@ -33,10 +33,10 @@ const ProjectForm = ({ onSubmit, onCancel }) => {
         throw new Error("Server responded with an error!");
       }
 
-      // Retrieve the new project's ID from the response
+      
       const createdProject = await response.json();
 
-      // Associate the new project with the user
+      
       const associateResponse = await fetch(
         "http://localhost:9000/api/userProjects",
         {
@@ -45,7 +45,7 @@ const ProjectForm = ({ onSubmit, onCancel }) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            userId: parseInt(userId, 10), // Ensure the userId is an integer
+            userId: parseInt(userId, 10), 
             projectId: createdProject.ProjectID,
           }),
         }
@@ -55,17 +55,17 @@ const ProjectForm = ({ onSubmit, onCancel }) => {
         throw new Error("Failed to associate project with user!");
       }
 
-      // Call the onSubmit prop to notify the parent component of the new project
+    
       onSubmit(createdProject);
 
-      // Optionally clear the form fields
+      
       setTitle("");
       setDescription("");
       setVideoLink("");
       setDeploymentLink("");
     } catch (error) {
       console.error("Error:", error);
-      // Here you could set an error message in state and display it to the user
+      
     }
   };
 

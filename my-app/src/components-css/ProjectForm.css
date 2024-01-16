@@ -4,7 +4,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  background-color: rgba(0, 0, 0, 0.5); 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -33,7 +33,7 @@
 
 .project-form textarea {
   resize: vertical;
-  min-height: 80px; /* Smaller textarea height */
+  min-height: 80px; 
 }
 
 .project-form button {

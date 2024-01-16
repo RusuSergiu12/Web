@@ -89,7 +89,7 @@ const Deliverables = () => {
             <DeliverableForm
               onSubmit={handleNewDeliverableSubmit}
               onCancel={() => setShowForm(false)}
-              ProjectID={projectID} // Pass the projectID here
+              ProjectID={projectID} 
             />
           </div>
         </div>

@@ -1,23 +1,23 @@
-/* This is for the overlay background */
+
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  background-color: rgba(0, 0, 0, 0.5); 
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* Ensure the form itself doesn't also have a fixed width and margin auto when using flexbox centering */
+
 .deliverable-form {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   background-color: rgba(255, 255, 255, 0.9);
-  max-width: 400px; /* Set a max width to prevent it from being too wide */
+  max-width: 400px; 
   margin: auto;
   align-items: center;
   justify-content: center;
@@ -38,12 +38,12 @@
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 14px;
-  width: 100%; /* Make sure input and textarea occupy full width */
+  width: 100%;
 }
 
 .deliverable-form textarea {
   resize: vertical;
-  min-height: 40px; /* Adjust min-height as per your preference */
+  min-height: 40px; 
 }
 
 .deliverable-form button {

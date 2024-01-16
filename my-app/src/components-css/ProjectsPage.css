@@ -3,18 +3,18 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* Changed to flex-start to align content to the top */
+  justify-content: flex-start; 
   height: 100vh;
 }
 
 .projects-list {
-  max-height: 150vh; /* Set a max-height for the scrolling area */
-  overflow-y: auto; /* Enables vertical scrolling if the content overflows */
+  max-height: 150vh; 
+  overflow-y: auto; 
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  width: 100%; /* Set a specific width if needed */
+  width: 100%; 
 }
 .project-card {
   display: flex;
@@ -37,16 +37,16 @@
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4); /* Dim the background */
+  background-color: rgba(0, 0, 0, 0.4); 
 }
 
 .modal-content {
-  background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent background */
-  margin: 10% auto; /* Adjust top margin as needed */
+  background-color: rgba(255, 255, 255, 0.5); 
+  margin: 10% auto; 
   padding: 20px;
-  border-radius: 8px; /* Optional: for rounded corners */
+  border-radius: 8px; 
   border: 1px solid #888;
-  width: 30%; /* Thinner width */
+  width: 30%; 
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;

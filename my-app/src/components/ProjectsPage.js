@@ -17,12 +17,12 @@ const ProjectsPage = () => {
   };
 
   const calculateAverageGrade = (grades) => {
-    if (grades.length <= 2) return "Not graded"; // Not enough grades to exclude the lowest and highest
+    if (grades.length <= 2) return "Not graded"; 
     const sortedGrades = grades.sort((a, b) => a - b);
-    // Remove the lowest and highest grade
+    
     sortedGrades.pop();
     sortedGrades.shift();
-    // Calculate the average of the remaining grades
+   
     const sum = sortedGrades.reduce(
       (accumulator, current) => accumulator + current,
       0
@@ -51,7 +51,7 @@ const ProjectsPage = () => {
           : `http://localhost:9000/api/userProjects/${userId}`;
 
       try {
-        // Fetch projects and deliverables
+        
         const [projectsResponse, deliverablesResponse] = await Promise.all([
           fetch(projectsUrl),
           fetch("http://localhost:9000/api/deliverables"),
@@ -59,22 +59,22 @@ const ProjectsPage = () => {
         const projectsData = await projectsResponse.json();
         const deliverablesData = await deliverablesResponse.json();
 
-        // Initialize a map to collect grades for each project
+        
         const projectGradesMap = {};
 
-        // Loop through deliverables to collect grades
+        
         deliverablesData.forEach((deliverable) => {
           const projectId = deliverable.ProjectID;
           if (!projectGradesMap[projectId]) {
             projectGradesMap[projectId] = [];
           }
-          // Add all grade values to the project's grades array, converting them to numbers
+         
           projectGradesMap[projectId].push(
             ...deliverable.Grades.map((g) => parseFloat(g.GradeValue))
           );
         });
 
-        // Calculate average grade for each project
+        
         const projectsWithGrades = projectsData.map((project) => {
           const grades = projectGradesMap[project.ProjectID] || [];
           project.FinalGrade = calculateAverageGrade(grades);

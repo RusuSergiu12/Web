@@ -104,7 +104,7 @@ const LoginSignup = () => {
         console.log("Response Data:", responseData);
 
         if (responseData) {
-          localStorage.setItem('UserType', newUser.UserType); // Save user type to localStorage
+          localStorage.setItem('UserType', newUser.UserType); 
 
           alert("User created successfully, please login to continue");
         } else {

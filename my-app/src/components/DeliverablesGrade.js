@@ -61,7 +61,7 @@ const DeliverablesGrades = () => {
 
           const data = await response.json();
           if (response.ok) {
-            // Handle successful response
+            
             setShowGradeModal(false);
             setGradedDeliverableIds([...gradedDeliverableIds, deliverableId]);
             const newGradesResponse = await fetch(
@@ -69,9 +69,9 @@ const DeliverablesGrades = () => {
             );
             const newGradesData = await newGradesResponse.json();
             setGradesData(newGradesData);
-            // Additional UI update or state management
+           
           } else {
-            // Handle errors in response
+            
             console.error("Failed to submit grade:", data);
           }
         } catch (error) {
@@ -98,15 +98,15 @@ const DeliverablesGrades = () => {
           gradesResponse.json(),
         ]);
 
-        // Filter out the grades related to the current user
+        
         const userGradedDeliverablesIds = gradesData
           .filter((grade) => grade.UserID === userId)
           .map((grade) => grade.DeliverableID);
 
-        // Set graded deliverable IDs
+        
         setGradedDeliverableIds(userGradedDeliverablesIds);
 
-        // Process and set deliverables data
+        
         if (Array.isArray(deliverablesData)) {
           const deliverablesWithGradingStatus = deliverablesData.map(
             (deliverable) => ({
