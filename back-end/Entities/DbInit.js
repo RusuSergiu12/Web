@@ -41,23 +41,23 @@ function FK_Config() {
     foreignKey: "ProjectID",
   });
 
-  // project and deliverables 1-n
+  
   Project.hasMany(Deliverable, { as: "Deliverables", foreignKey: "ProjectID" });
   Deliverable.belongsTo(Project, { as: "Project", foreignKey: "ProjectID" });
 
-  // user and grade 1-n
+ 
   User.hasMany(Grade, { as: "Grades", foreignKey: "UserID" });
   Grade.belongsTo(User, { as: "User", foreignKey: "UserID" });
-  // grade and deliverables 1-n
+  
   Deliverable.hasMany(Grade, { as: "Grades", foreignKey: "DeliverableID" });
   Grade.belongsTo(Deliverable, {
     as: "Deliverable",
     foreignKey: "DeliverableID",
   });
-  // user and permission 1-n
+  
   User.hasMany(Permission, { as: "Permissions", foreignKey: "UserID" });
   Permission.belongsTo(User, { as: "User", foreignKey: "UserID" });
-  // project and permission 1-n
+  
   Project.hasMany(Permission, { as: "Permissions", foreignKey: "ProjectID" });
   Permission.belongsTo(Project, { as: "Project", foreignKey: "ProjectID" });
 }

@@ -20,9 +20,9 @@ async function getUserProjectsByUserId(id) {
       {
         model: Project,
         as: "Projects",
-        required: false, // Set to true if you only want users with projects
+        required: false, 
         through: {
-          attributes: [], // Exclude the join table
+          attributes: [], 
         },
         attributes: [
           "ProjectID",
@@ -31,7 +31,7 @@ async function getUserProjectsByUserId(id) {
           "VideoLink",
           "DeploymentLink",
           "FinalGrade",
-        ], // Include only the project details you need
+        ], 
       },
     ],
   });

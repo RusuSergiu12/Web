@@ -18,12 +18,12 @@ async function getProjectsUserCanGrade(userId) {
       include: [
         {
           model: Project,
-          as: "Project", // Assuming 'as' is defined in your association
+          as: "Project", 
         },
       ],
     });
 
-    // Extracting the projects from the permissions
+    
     return projects.map((permission) => permission.Project);
   } catch (error) {
     console.error("Error in getProjectsUserCanGrade:", error);
