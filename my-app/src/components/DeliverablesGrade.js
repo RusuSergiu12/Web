@@ -61,7 +61,6 @@ const DeliverablesGrades = () => {
 
           const data = await response.json();
           if (response.ok) {
-            
             setShowGradeModal(false);
             setGradedDeliverableIds([...gradedDeliverableIds, deliverableId]);
             const newGradesResponse = await fetch(
@@ -69,9 +68,7 @@ const DeliverablesGrades = () => {
             );
             const newGradesData = await newGradesResponse.json();
             setGradesData(newGradesData);
-           
           } else {
-            
             console.error("Failed to submit grade:", data);
           }
         } catch (error) {
@@ -98,15 +95,12 @@ const DeliverablesGrades = () => {
           gradesResponse.json(),
         ]);
 
-        
         const userGradedDeliverablesIds = gradesData
           .filter((grade) => grade.UserID === userId)
           .map((grade) => grade.DeliverableID);
 
-        
         setGradedDeliverableIds(userGradedDeliverablesIds);
 
-        
         if (Array.isArray(deliverablesData)) {
           const deliverablesWithGradingStatus = deliverablesData.map(
             (deliverable) => ({
@@ -159,7 +153,11 @@ const DeliverablesGrades = () => {
           </div>
         </div>
       ) : (
-        <p>No deliverables found.</p>
+        <div className="butoane">
+          <button id="goBackBtn" onClick={() => navigate(-1)}>
+            No deliverables, go Back
+          </button>
+        </div>
       )}
       {showGradeModal && (
         <div className="modal">
