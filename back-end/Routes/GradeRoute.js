@@ -6,6 +6,7 @@ import {
   deleteGrade,
   updateGrade,
   hasUserGradedDeliverable,
+  getGradeByUserAndDeliverable,
 } from "../DataAccess/GradeDA.js";
 
 let gradeRouter = express.Router();
@@ -37,6 +38,18 @@ gradeRouter.get("/hasGraded", async (req, res) => {
     res.json({ hasGraded });
   } catch (error) {
     res.status(500).json({ error: true, msg: "Error checking grade status" });
+  }
+});
+gradeRouter.get("/api/grade/:userId/:deliverableId", async (req, res) => {
+  try {
+    const { userId, deliverableId } = req.params;
+    const grade = await getGradeByUserAndDeliverable(userId, deliverableId);
+    if (!grade) {
+      return res.status(404).json({ msg: "Grade not found" });
+    }
+    res.json(grade);
+  } catch (error) {
+    res.status(500).json({ error: true, msg: "Error fetching grade" });
   }
 });
 

@@ -42,6 +42,20 @@ async function hasUserGradedDeliverable(userId, deliverableId) {
   });
   return grade !== null;
 }
+async function getGradeByUserAndDeliverable(userId, deliverableId) {
+  try {
+    const grade = await Grade.findOne({
+      where: {
+        UserID: userId,
+        DeliverableID: deliverableId,
+      },
+    });
+    return grade;
+  } catch (error) {
+    console.error("Error fetching grade:", error);
+    return null; // or handle the error as you see fit
+  }
+}
 export {
   getGrades,
   getGradeById,
@@ -49,4 +63,5 @@ export {
   deleteGrade,
   updateGrade,
   hasUserGradedDeliverable,
+  getGradeByUserAndDeliverable,
 };
