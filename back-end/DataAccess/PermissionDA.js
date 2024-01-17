@@ -39,6 +39,20 @@ async function updatePermission(id, permission) {
     return { error: true, msg: "Error updating permission" };
   }
 }
+async function getGradeModificationDeadline(userId, projectId) {
+  try {
+    const permission = await Permission.findOne({
+      where: {
+        UserID: userId,
+        ProjectID: projectId,
+      },
+    });
+    return permission ? permission.GradeModificationDeadline : null;
+  } catch (error) {
+    console.error("Error fetching GradeModificationDeadline:", error);
+    throw error;
+  }
+}
 
 export {
   getPermissions,
@@ -47,4 +61,5 @@ export {
   createPermission,
   deletePermission,
   updatePermission,
+  getGradeModificationDeadline,
 };

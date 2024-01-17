@@ -134,16 +134,26 @@ const DeliverablesGrades = () => {
       ) : deliverables && deliverables.length ? (
         <div className="deliverables-list">
           {deliverables.map((deliverable) => (
-            <div
-              className="deliverable-card"
-              key={deliverable.DeliverableID}
-              onClick={() => handleCardClick(deliverable, gradesData)}
-            >
+            <div className="deliverable-card" key={deliverable.DeliverableID}>
               <h2>{deliverable.Title}</h2>
               <p>{deliverable.Description}</p>
               <p>
                 Due Date: {new Date(deliverable.DueDate).toLocaleDateString()}
               </p>
+              <button
+                id="goBackBtn"
+                // onClick={() => handleEditGradeClick(deliverable)}
+                disabled={!deliverable.hasGraded} // Disable button if the user hasn't graded
+              >
+                Edit Grade
+              </button>
+              <button
+                id="goBackBtn"
+                onClick={() => handleCardClick(deliverable, gradesData)}
+              >
+                {" "}
+                Add Grade
+              </button>
             </div>
           ))}
           <div className="butoane">
