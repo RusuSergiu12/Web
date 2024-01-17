@@ -160,8 +160,8 @@ const LoginSignup = () => {
 
         if (responseData) {
           localStorage.setItem("UserType", newUser.UserType);
-          const userId = responseData.UserID; // Get the user ID from the response
-          await assignStudentPermissions(userId); // Call it here
+          const userId = responseData.UserID;
+          //await assignStudentPermissions(userId);
           alert("User created successfully, please login to continue");
         } else {
           console.error("Failed to create user:", responseData.msg);
