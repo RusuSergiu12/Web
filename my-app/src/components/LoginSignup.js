@@ -10,6 +10,59 @@ const LoginSignup = () => {
   const [action, setAction] = useState("Sign Up");
   const navigate = useNavigate();
 
+  const assignStudentPermissions = async (userId) => {
+    try {
+      const projectsResponse = await fetch(
+        `http://localhost:9000/api/userProjects?userId=${userId}`
+      );
+      const userProjects = await projectsResponse.json();
+
+      const allProjectsResponse = await fetch(
+        "http://localhost:9000/api/projects"
+      );
+      const allProjects = await allProjectsResponse.json();
+
+      const projectsNotPartOf = allProjects.filter(
+        (project) =>
+          !userProjects.some(
+            (userProject) => userProject.ProjectID === project.ProjectID
+          )
+      );
+
+      if (projectsNotPartOf.length === 0) {
+        console.log("User is already part of all projects.");
+        return;
+      }
+
+      const randomIndex = Math.floor(Math.random() * projectsNotPartOf.length);
+      const randomProject = projectsNotPartOf[randomIndex];
+
+      const permissions = {
+        CanGrade: true,
+        CanModifyGrade: true,
+      };
+
+      const currentTime = new Date();
+      const gradeModificationDeadline = new Date(currentTime);
+      gradeModificationDeadline.setDate(currentTime.getDate() + 3);
+
+      await fetch("http://localhost:9000/api/permission", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          UserID: userId,
+          ProjectID: randomProject.ProjectID,
+          Permissions: permissions,
+          CanGrade: true,
+          CanModifyGrade: true,
+          GradeModificationDeadline: gradeModificationDeadline,
+        }),
+      });
+    } catch (error) {
+      console.error("Error in assigning permissions:", error);
+    }
+  };
+
   const handleSubmit = async () => {
     const email = document.querySelector('input[type="email"]')?.value;
     const username = document.querySelector('input[type="text"]')?.value;
@@ -44,9 +97,11 @@ const LoginSignup = () => {
           alert("Invalid username/password");
           return;
         }
-        localStorage.setItem('UserType', userData.UserType);
+        localStorage.setItem("UserType", userData.UserType);
         const userId = user.UserID;
-        
+        if (userData.UserType === "student") {
+          await assignStudentPermissions(userId);
+        }
         navigate(`/projects/${userId}`);
       } catch (error) {
         console.error("Error:", error.message);
@@ -104,8 +159,9 @@ const LoginSignup = () => {
         console.log("Response Data:", responseData);
 
         if (responseData) {
-          localStorage.setItem('UserType', newUser.UserType); 
-
+          localStorage.setItem("UserType", newUser.UserType);
+          const userId = responseData.UserID; // Get the user ID from the response
+          await assignStudentPermissions(userId); // Call it here
           alert("User created successfully, please login to continue");
         } else {
           console.error("Failed to create user:", responseData.msg);
