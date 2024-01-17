@@ -160,7 +160,7 @@ const LoginSignup = () => {
 
         if (responseData) {
           localStorage.setItem("UserType", newUser.UserType);
-          const userId = responseData.UserID;
+          //const userId = responseData.UserID;
           //await assignStudentPermissions(userId);
           alert("User created successfully, please login to continue");
         } else {
