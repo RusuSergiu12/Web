@@ -11,8 +11,76 @@ const DeliverablesGrades = () => {
   const [grade, setGrade] = useState(1.0);
   const [gradesData, setGradesData] = useState([]);
   const [gradedDeliverableIds, setGradedDeliverableIds] = useState([]);
+  const [isEditingGrade, setIsEditingGrade] = useState(false);
 
   const navigate = useNavigate();
+
+  const handleGradeEditClick = async (deliverable) => {
+    try {
+      const gradeDeadlineResponse = await fetch(
+        `http://localhost:9000/api/permissions/deadline/${userId}/${projectID}`
+      );
+      const { GradeModificationDeadline } = await gradeDeadlineResponse.json();
+      const deadline = new Date(GradeModificationDeadline);
+      const now = new Date();
+
+      const hasGradedResponse = await fetch(
+        `http://localhost:9000/api/hasGraded?userId=${userId}&deliverableId=${deliverable.DeliverableID}`
+      );
+      const { hasGraded } = await hasGradedResponse.json();
+
+      if (hasGraded && now < deadline) {
+        setSelectedDeliverable(deliverable);
+        setIsEditingGrade(true);
+        setShowGradeModal(true);
+      } else {
+        alert("You cannot edit the grade for this deliverable.");
+      }
+    } catch (error) {
+      console.error("Error checking grade status or deadline:", error);
+    }
+  };
+
+  const handleGradeUpdate = async (event) => {
+    event.preventDefault();
+    const gradeValue = parseFloat(grade);
+
+    if (gradeValue >= 1.0 && gradeValue <= 10.0) {
+      const deliverableId = selectedDeliverable.DeliverableID;
+      try {
+        const response = await fetch(
+          `http://localhost:9000/api/grade/${userId}/${deliverableId}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              GradeValue: gradeValue,
+              GradeDate: new Date().toISOString(),
+            }),
+          }
+        );
+
+        if (response.ok) {
+          resetModal();
+
+          setShowGradeModal(false);
+          const newGradesResponse = await fetch(
+            "http://localhost:9000/api/grades"
+          );
+          const newGradesData = await newGradesResponse.json();
+          setGradesData(newGradesData);
+        } else {
+          console.error("Failed to update grade:", await response.json());
+        }
+      } catch (error) {
+        console.error("Error updating grade:", error);
+      }
+    } else {
+      alert("Please enter a valid grade between 1.00 and 10.00.");
+    }
+  };
 
   const handleCardClick = async (deliverable) => {
     try {
@@ -127,6 +195,13 @@ const DeliverablesGrades = () => {
     fetchData();
   }, [projectID, userId]);
 
+  const resetModal = () => {
+    setShowGradeModal(false);
+    setIsEditingGrade(false);
+    setSelectedDeliverable(null);
+    setGrade(1.0);
+  };
+
   return (
     <div className="deliverables-container">
       {loading ? (
@@ -142,8 +217,7 @@ const DeliverablesGrades = () => {
               </p>
               <button
                 id="goBackBtn"
-                // onClick={() => handleEditGradeClick(deliverable)}
-                disabled={!deliverable.hasGraded} // Disable button if the user hasn't graded
+                onClick={() => handleGradeEditClick(deliverable)}
               >
                 Edit Grade
               </button>
@@ -179,7 +253,9 @@ const DeliverablesGrades = () => {
               &times;
             </span>
             <h2>Enter Grade for {selectedDeliverable?.Title}</h2>
-            <form onSubmit={handleGradeSubmit}>
+            <form
+              onSubmit={isEditingGrade ? handleGradeUpdate : handleGradeSubmit}
+            >
               <input
                 type="number"
                 min="1.00"
@@ -189,7 +265,9 @@ const DeliverablesGrades = () => {
                 onChange={handleGradeChange}
                 required
               />
-              <button type="submit">Submit Grade</button>
+              <button type="submit">
+                {isEditingGrade ? "Update Grade" : "Submit Grade"}
+              </button>
             </form>
           </div>
         </div>

@@ -56,6 +56,35 @@ async function getGradeByUserAndDeliverable(userId, deliverableId) {
     return null; // or handle the error as you see fit
   }
 }
+// function to update a grade based on userId and deliverableId
+async function updateGradeByUserAndDeliverable(
+  userId,
+  deliverableId,
+  newGradeData
+) {
+  try {
+    let gradeToUpdate = await Grade.findOne({
+      where: {
+        UserID: userId,
+        DeliverableID: deliverableId,
+      },
+    });
+
+    if (!gradeToUpdate) {
+      return { error: true, msg: "Grade not found" };
+    }
+
+    await gradeToUpdate.update(newGradeData);
+    return {
+      error: false,
+      msg: "Grade updated successfully",
+      obj: gradeToUpdate,
+    };
+  } catch (error) {
+    return { error: true, msg: "Error updating grade" };
+  }
+}
+
 export {
   getGrades,
   getGradeById,
@@ -64,4 +93,5 @@ export {
   updateGrade,
   hasUserGradedDeliverable,
   getGradeByUserAndDeliverable,
+  updateGradeByUserAndDeliverable,
 };
